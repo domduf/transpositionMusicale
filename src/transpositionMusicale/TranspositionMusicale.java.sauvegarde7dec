@@ -1,0 +1,132 @@
+package transpositionMusicale;
+
+
+/**
+ * 
+ * 
+ * 
+ * @version 7 decembre 2015
+ * @author Dominique Dufour NFA 031 année 2014-2015
+ *  
+ */
+public class TranspositionMusicale {
+	
+	/**
+	 * Ce projet doit permettre de transposer une armure musicale vers une autre. 
+	 * On utilisera au debut une description des clés sous la forme U1 pour Ut 1 etG2 pour Sol 2ème ligne.
+	 * 
+	 * Main
+	 * @param args
+	 */
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+
+		// déclaration des variables
+		int codeCleDepart = 0; 		// code de la clé du morceau de départ
+		int codeCleTranspo=0;		// code de la clé du morceau pour lire à vue
+		int codeTonDepart = 0;		// code de la tonalité du morceau de départ
+		int codeTonInstruDepart=0; 	// l'instrument qui joue le morceau de départ
+									// est dans cette tonalité
+		int codeTonInstruArrive=0; 	// l'instrument qui devra jouer le morceau
+									// transposé est dans cette tonalité
+		int codeTonFinal=0;			//Ton transposé.
+		
+		boolean transpoVue = false; // l'instrument qui devra jouer le morceau
+									// devra-t-il transposer à vue ?
+
+		
+		
+		Terminal.ecrireStringln("------------------------------------------------------------------------------");
+		Terminal.ecrireStringln("||  Bonjour, ce programme doit vous permettre de "
+				+ "transposer une partition.  ||");
+		Terminal.ecrireStringln("------------------------------------------------------------------------------");
+		Terminal.sautDeLigne();
+		
+		
+		
+		
+		// ----------------------------------------
+		// "Entrer la clé de la partition de  départ  (UT3="U3" UT4="U4", FA4="F4"  FA3 ou SOL)"
+
+		Terminal.ecrireStringln("Pour commencer entrez la clé qui débute votre morceau: ");
+		Terminal.ecrireStringln("Merci de respecter ce code: u3 signifie cle d\'Ut 3ème ligne,");
+		Terminal.ecrireStringln("F3 signifie clé de Fa 3eme ligne, F et G pour clé de Fa et Sol, etc");
+
+		// Saisie de la clé de depart
+		codeCleDepart = Methodes.entreeCle();
+
+		// ----------------------------------------
+		// Affichage du code de la clé de départ
+		//Terminal.ecrireString("Code clé Départ = " + codeCleDepart);
+		Terminal.ecrireStringln("Clé de départ --> "+Methodes.conversionCodeCleVersCle(codeCleDepart));
+		Terminal.sautDeLigne();
+
+		//TODO, mais un peu inutile..
+		// "Votre morceau comporte-t-il un la becarre, c.à.d. est-il en mineur ? (o/n, n en cas de doute)"
+		
+		// "Dans quel ton est la partition de départ ?"
+		Terminal.ecrireStringln("Entrez maintenant l'armure du morceau de départ.");
+		codeTonDepart = Methodes.entreeTon();
+		/* Affichage du code de la tonalité de départ
+		Terminal.ecrireStringln("Code ton Départ = " + codeTonDepart);*/
+		Terminal.sautDeLigne();
+		
+		
+		
+		
+		// "Dans quel ton est l'instrument qui lit la partition d'origine ? "
+		Terminal.ecrireStringln("Entrez maintenant l'armure du ton de l'instrument d'origine.");
+		codeTonInstruDepart = Methodes.entreeTon();
+		//Terminal.ecrireStringln("Code ton instrument origine = " + codeTonInstruDepart);
+		Terminal.sautDeLigne();
+		
+		// "Dans quel ton est l'instrument pour lequel vous voulez transposer ? "		
+		Terminal.ecrireStringln("Entrez maintenant l'armure du ton de l'instrument final.");
+		codeTonInstruArrive = Methodes.entreeTon();
+		//Terminal.ecrireStringln("Code ton instrument final = " + codeTonInstruArrive);
+		Terminal.sautDeLigne();	
+		
+		
+		//Calcul du code du Ton Final
+		codeTonFinal= Methodes.calculTonFinal(codeTonDepart, codeTonInstruDepart, codeTonInstruArrive );
+		//Terminal.ecrireStringln("et voilà la tonalité en clair: "+Methodes.tonEnClair(codeTonFinal));
+		
+		
+		//recapitulation des variables:
+		Terminal.ecrireStringln("Recapitulation des variables: ");
+		Terminal.ecrireStringln("codeCleDepart "+codeCleDepart+ " Clé de "+Methodes.conversionCodeCleVersCle(codeCleDepart));
+		Terminal.ecrireStringln("codeTonDepart "+codeTonDepart+ " armure--> "+Methodes.tonEnClair(codeTonDepart));
+		Terminal.ecrireStringln("codeTonInstruDepart "+codeTonInstruDepart+ " armure--> "+Methodes.tonEnClair(codeTonInstruDepart));
+		Terminal.ecrireStringln("codeTonInstruArrive "+codeTonInstruArrive+ " armure--> "+Methodes.tonEnClair(codeTonInstruArrive));
+		Terminal.ecrireStringln("codeTonFinal "+codeTonFinal+ " armure--> "+Methodes.tonEnClair(codeTonFinal));
+		Terminal.sautDeLigne();
+		
+		
+		// "Voulez-vous transposer à vue ? (o/n)"
+		Terminal.ecrireStringln("------------------------------------------------------------------------------");		
+		Terminal.ecrireStringln("||                       Voulez-vous transposer à vue ?                     ||");
+		Terminal.ecrireStringln("------------------------------------------------------------------------------");		
+
+		transpoVue=Methodes.entreeTranspoVue();
+			// Terminal.ecrireStringln("Transpo à vue: "+ transpoVue);
+			// si oui, calcul clé avec laquelle on doit lire la partition d'origine
+			// afin que les notes entendues soient les mêmes.
+			if (transpoVue){
+			codeCleTranspo = Methodes.transpoDeCle(codeCleDepart,
+					codeTonInstruDepart, codeTonInstruArrive);
+				Terminal.ecrireStringln("Transposition à vue");
+				Terminal.ecrireStringln("Voici la clé à l'origine --> "+Methodes.conversionCodeCleVersCle(codeCleDepart));
+				Terminal.ecrireString("Voici la clé de transpo de transposition à vue -----> ");
+				
+				Terminal.ecrireStringln(" " +Methodes.conversionCodeCleVersCle(codeCleTranspo));
+				Terminal.sautDeLigne();
+			}
+		
+		
+		// Calcul du contenu de l'armure de la partition
+		// ré-écrite pour l'instrument final.
+		//	Terminal.ecrireStringln("Code ton final: "+ codeTonFinal);
+			Terminal.ecrireStringln("Et voilà la tonalité en clair: "+Methodes.tonEnClair(codeTonFinal));
+	}
+
+}
